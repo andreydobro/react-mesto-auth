@@ -1,0 +1,7 @@
+.body {
+    background: #000;
+    font-family: "Inter", "Arial", sans-serif;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}

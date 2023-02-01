@@ -1,0 +1,15 @@
+.element__like_active {
+    background-image: url(../../../images/heart_activ.svg);
+    border: 0;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    background-size: 22px;
+    width: 22px;
+    height: 19px;
+    margin: 22px 0px 0px;
+    cursor: pointer;
+}
+
+.element__like:hover {
+    opacity: 0.5;
+}

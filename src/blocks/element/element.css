@@ -1,0 +1,11 @@
+.element {
+    width: 282px;
+    height: 361px;
+    background: #FFFFFF;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    position: relative;
+    list-style-type: none;
+}
