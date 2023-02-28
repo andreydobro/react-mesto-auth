@@ -1,16 +1,19 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import '../index';
 import { Header } from './Header';
 import { Main } from './Main'
 import { Footer } from './Footer'
-//import { useState, useEffect } from 'react';
 import { PopupWithForm } from './PopupWithForm';
 import { ImagePopup } from './ImagePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { api } from '../utils/api';
 import { EditProfilePopup } from './EditProfilePopup'
-import { EditAvatarPopup } from './EditAvatarPopup'; 
+import { EditAvatarPopup } from './EditAvatarPopup';
 import { AddPlacePopup } from './AddPlacePopup';
+import Register from './Register';
+import Login from './Login';
+import ProtectedRouter from './ProtectedRouter';
+import { Route, Routes, BrowserRouter } from "react-router-dom";
 
 export const App = () => {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -21,6 +24,7 @@ export const App = () => {
   const [selectedCard, setSelectedCard] = useState({});
   const [cards, setCards] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     api
@@ -155,48 +159,60 @@ export const App = () => {
       });
   }
 
-  
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header />
-        <Main
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          cards={cards}
-          onCardDelete={handleCardDelete}
-        />
-        <Footer />
+
+        <BrowserRouter>
+          <Routes>
+            <Route path='/sign-up' element={<Register />} />
+            <Route path='/sign-in' element={<Login />} />
+            <Route path='/' element={
+              <ProtectedRouter exact path="/" loggedIn={loggedIn} >
+                <Header />
+                <Main
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onEditAvatar={handleEditAvatarClick}
+                  onCardClick={handleCardClick}
+                  onCardLike={handleCardLike}
+                  cards={cards}
+                  onCardDelete={handleCardDelete}
+                />
+                <Footer />
+              </ProtectedRouter>
+            }
+            />
+          </Routes>
+        </BrowserRouter>
       </div>
       <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-          isLoading={isLoading}
-        />
-       <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleUpdatePlaces}
-          isLoading={isLoading}
-        />
+        isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
+        onUpdateUser={handleUpdateUser}
+        isLoading={isLoading}
+      />
+      <AddPlacePopup
+        isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}
+        onAddPlace={handleUpdatePlaces}
+        isLoading={isLoading}
+      />
       <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-          isLoading={isLoading}
-        />
+        isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
+        onUpdateAvatar={handleUpdateAvatar}
+        isLoading={isLoading}
+      />
       <ImagePopup card={selectedCard} onClose={closeAllPopups}></ImagePopup>
       <PopupWithForm
-          onClose={closeAllPopups}
-          title="Вы уверены?"
-          name="confirmation"
-          isOpen={isConfirmDeletePopupOpen}
-          btnName="Да"
-        />
+        onClose={closeAllPopups}
+        title="Вы уверены?"
+        name="confirmation"
+        isOpen={isConfirmDeletePopupOpen}
+        btnName="Да"
+      />
       {/**/}
     </CurrentUserContext.Provider>
 
