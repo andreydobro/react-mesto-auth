@@ -13,7 +13,7 @@ import { AddPlacePopup } from './AddPlacePopup';
 import Register from './Register';
 import Login from './Login';
 import ProtectedRouter from './ProtectedRouter';
-import { Route, Routes, BrowserRouter } from "react-router-dom";
+import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
 
 export const App = () => {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -24,7 +24,7 @@ export const App = () => {
   const [selectedCard, setSelectedCard] = useState({});
   const [cards, setCards] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [isLoggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     api
@@ -166,10 +166,16 @@ export const App = () => {
 
         <BrowserRouter>
           <Routes>
+          <Route
+            path="*"
+            element={
+              isLoggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />
+            }
+          />
             <Route path='/sign-up' element={<Register />} />
             <Route path='/sign-in' element={<Login />} />
             <Route path='/' element={
-              <ProtectedRouter exact path="/" loggedIn={loggedIn} >
+              <ProtectedRouter exact path="/" loggedIn={isLoggedIn} >
                 <Header />
                 <Main
                   onEditProfile={handleEditProfileClick}
@@ -186,6 +192,7 @@ export const App = () => {
             />
           </Routes>
         </BrowserRouter>
+        
       </div>
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
