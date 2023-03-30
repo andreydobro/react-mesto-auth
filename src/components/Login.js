@@ -1,25 +1,25 @@
-import logo from "../images/logo.svg";
-import { Link } from "react-router-dom";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import logo from "../images/logo.svg";
 
-function Login() {
-  // const [formParams, setFormParams] = useState({
-  //   email: "",
-  //   password: "",
-  // });
+function Login(props) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  // function handleChange(evt) {
-  //   const { name, value } = evt.target;
-  //   setFormParams((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // }
+  function handleEmailInput(evt) {
+    setEmail(evt.target.value);
+  }
 
-  // function handleSubmit(evt) {
-  //   evt.preventDefault();
-  //   props.handleAuthorize(formParams);
-  // }
+  function handlePasswordInput(evt) {
+    setPassword(evt.target.value);
+  }
+
+  function handleSubmit(evt) {
+    evt.preventDefault();
+    props.onLogin(email, password);
+    setEmail('');
+    setPassword('');
+  }
 
   return (
     <>
@@ -30,26 +30,31 @@ function Login() {
         </Link>
       </header>
 
-      <form className="entry-form" >
+      <form className="entry-form" onSubmit={handleSubmit}>
         <h2 className="entry-form__title">Вход</h2>
         <input
           // value={formParams.email}
-          // onChange={handleChange}
+          onChange={handleEmailInput}
           name="email"
           type="email"
           className="entry-form__input"
           placeholder="Email"
-          autoComplete="off"
+          // autoComplete="off"
+          value={email}
+          required
         ></input>
         <span className="entry-form__input-error"></span>
         <input
           // value={formParams.password}
-          // onChange={handleChange}
+          onChange={handlePasswordInput}
           name="password"
           type="password"
           className="entry-form__input"
           placeholder="Пароль"
-          autoComplete="off"
+          // autoComplete="off"
+          value={password}
+          autoComplete="on"
+          required
         ></input>
         <span className="entry-form__input-error"></span>
         <button type="submit" className="entry-form__button">

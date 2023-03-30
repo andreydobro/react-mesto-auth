@@ -14,7 +14,7 @@ import Register from './Register';
 import Login from './Login';
 import ProtectedRouter from './ProtectedRouter';
 import * as auth from "./Auth";
-import { Route, Routes, BrowserRouter, Navigate, useNavigate } from "react-router-dom";
+import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
 import resolve from "../images/icon-success.svg";
 import reject from "../images/icon-error.svg";
 import InfoTooltip from "./InfoTooltip";
@@ -33,7 +33,8 @@ export const App = () => {
   const [popupImage, setPopupImage] = useState("");
   const [popupTitle, setPopupTitle] = useState("");
   const [infoTooltip, setInfoTooltip] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     api
@@ -56,7 +57,7 @@ export const App = () => {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
-    // setInfoTooltip(false);
+    setInfoTooltip(false);
     setSelectedCard({})
   }
 
@@ -86,9 +87,9 @@ export const App = () => {
     }
   }
 
-  // function handleInfoTooltip() {
-  //   setInfoTooltip(true);
-  // }
+  function handleInfoTooltip() {
+    setInfoTooltip(true);
+  }
 
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
@@ -183,12 +184,12 @@ export const App = () => {
     auth.registerUser(email, password).then(() => {
       setPopupImage(resolve);
       setPopupTitle("Вы успешно зарегистрировались!");
-      // navigate("/sign-in");
+      navigate("/sign-in");
     }).catch(() => {
       setPopupImage(reject);
       setPopupTitle("Что-то пошло не так! Попробуйте ещё раз.");
     })
-    // .finally(handleInfoTooltip);
+      .finally(handleInfoTooltip);
   }
 
   function onLogin(email, password) {
@@ -196,11 +197,11 @@ export const App = () => {
       localStorage.setItem("jwt", res.token);
       setIsLoggedIn(true);
       setEmailName(email);
-      // navigate("/");
+      navigate("/");
     }).catch(() => {
       setPopupImage(reject);
       setPopupTitle("Что-то пошло не так! Попробуйте ещё раз.");
-      // handleInfoTooltip();
+      handleInfoTooltip();
     });
   }
 
@@ -216,50 +217,66 @@ export const App = () => {
         console.error(err);
       });
     }
-  }, []);
+  }, [navigate, isLoggedIn]);
 
-  useEffect(() => {
-    if (isLoggedIn === true) {
-      // navigate("/");
-    }
-  }, [isLoggedIn // navigate
-]);
+  function onSignOut() {
+    setIsLoggedIn(false);
+    setEmailName(null);
+    navigate("/sign-in");
+    localStorage.removeItem("jwt");
+  }
+
+    useEffect(() => {
+      if (isLoggedIn === true) {
+        navigate("/");
+      }
+    }, [
+  ]);
 
 
+  // // Верификация токена пользователя
+  // useEffect( () => {
+  //   const userToken = localStorage.getItem('token')
+  //   if (userToken) { auth. getToken(userToken)
+  //       .then( (res) => { setEmailName(res.data.email); setIsLoggedIn(true); navigate.push('/') })
+  //       .catch( (err) => { console.log(`Возникла ошибка верификации токена, ${err}`) })
+  //   }
+  // }, [navigate, isLoggedIn])
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
 
-        <BrowserRouter>
-          <Routes>
+
+        <Routes>
           <Route
             path="*"
             element={
               isLoggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />
             }
           />
-            <Route path='/sign-up' element={<Register onRegister={onRegister} />} />
-            <Route path='/sign-in' element={<Login onLogin={onLogin} />} />
-            <Route path='/' element={
-              <ProtectedRouter exact path="/" loggedIn={isLoggedIn} >
-                <Header />
-                <Main
-                  onEditProfile={handleEditProfileClick}
-                  onAddPlace={handleAddPlaceClick}
-                  onEditAvatar={handleEditAvatarClick}
-                  onCardClick={handleCardClick}
-                  onCardLike={handleCardLike}
-                  cards={cards}
-                  onCardDelete={handleCardDelete}
-                />
-                <Footer />
-              </ProtectedRouter>
-            }
-            />
-          </Routes>
-        </BrowserRouter>
-        
+          <Route path='/sign-up' element={<Register onRegister={onRegister} />} />
+          <Route path='/sign-in' element={<Login onLogin={onLogin} />} />
+          <Route path='/' element={
+            <ProtectedRouter exact path="/" loggedIn={isLoggedIn} >
+              <Header title="Выйти" mail={emailName} onClick={onSignOut} route="" />
+              <Main
+                isLogged={isLoggedIn}
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onEditAvatar={handleEditAvatarClick}
+                onCardClick={handleCardClick}
+                onCardLike={handleCardLike}
+                cards={cards}
+                onCardDelete={handleCardDelete}
+              />
+              <Footer />
+            </ProtectedRouter>
+          }
+          />
+        </Routes>
+
+
       </div>
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}

@@ -1,8 +1,3 @@
-// import React from 'react';
-// import iconError from '../images/icon-error.svg';
-// import iconSuccess from '../images/icon-success.svg'
-// import { useLocation, useNavigate } from 'react-router-dom';
-
 function InfoTooltip(props) {
     return (
       <div className={`popup ${props.isOpen ? 'popup_opened' : ''}`} onClick={props.onCloseClick}>
