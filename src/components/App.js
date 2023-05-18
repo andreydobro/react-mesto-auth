@@ -10,14 +10,11 @@ import { api } from '../utils/api';
 import { EditProfilePopup } from './EditProfilePopup'
 import { EditAvatarPopup } from './EditAvatarPopup';
 import { AddPlacePopup } from './AddPlacePopup';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
-import ProtectedRouter from './ProtectedRouter';
-import * as auth from "./Auth";
-import { Route, Routes, Navigate, useNavigate } from "react-router-dom";
-import resolve from "../images/icon-success.svg";
-import reject from "../images/icon-error.svg";
-import InfoTooltip from "./InfoTooltip";
+import ProtectedRoute from './ProtectedRoute';
+import * as auth from './Auth';
 
 export const App = () => {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -29,7 +26,7 @@ export const App = () => {
   const [cards, setCards] = useState([]);
   const [currentUser, setCurrentUser] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [emailName, setEmailName] = useState(null);
+  const [email, setEmail] = useState(null);
   const [popupImage, setPopupImage] = useState("");
   const [popupTitle, setPopupTitle] = useState("");
   const [infoTooltip, setInfoTooltip] = useState(false);
@@ -57,7 +54,6 @@ export const App = () => {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
-    setInfoTooltip(false);
     setSelectedCard({})
   }
 
@@ -79,16 +75,6 @@ export const App = () => {
 
   function handleConfirmDeleteClick() {
     setIsConfirmDeletePopupOpen(true);
-  }
-
-  function handlePopupCloseClick(evt) {
-    if (evt.target.classList.contains('popup_opened')) {
-      closeAllPopups();
-    }
-  }
-
-  function handleInfoTooltip() {
-    setInfoTooltip(true);
   }
 
   function handleCardLike(card) {
@@ -181,87 +167,66 @@ export const App = () => {
   }
 
   function onRegister(email, password) {
-    auth.registerUser(email, password).then(() => {
-      setPopupImage(resolve);
+    auth.register(email, password).then(() => {
+      //setPopupImage(resolve);
       setPopupTitle("Вы успешно зарегистрировались!");
       navigate("/sign-in");
     }).catch(() => {
-      setPopupImage(reject);
+      //setPopupImage(reject);
       setPopupTitle("Что-то пошло не так! Попробуйте ещё раз.");
     })
-      .finally(handleInfoTooltip);
+    //.finally(handleInfoTooltip);
   }
 
   function onLogin(email, password) {
-    auth.loginUser(email, password).then((res) => {
+    auth.autohorize(email, password).then((res) => {
       localStorage.setItem("jwt", res.token);
       setIsLoggedIn(true);
-      setEmailName(email);
+      setEmail(email);
       navigate("/");
     }).catch(() => {
-      setPopupImage(reject);
+      //setPopupImage(reject);
       setPopupTitle("Что-то пошло не так! Попробуйте ещё раз.");
-      handleInfoTooltip();
+      //handleInfoTooltip();
     });
   }
 
-  useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      auth.getToken(jwt).then((res) => {
-        if (res) {
-          setIsLoggedIn(true);
-          setEmailName(res.data.email);
-        }
-      }).catch((err) => {
-        console.error(err);
-      });
+  const tokenCheck = () => {
+    if (localStorage.getItem('jwt')) {
+      const jwt = localStorage.getItem('jwt');
+      auth.getToken(jwt)
+        .then((res) => {
+          if (res) {
+            setEmail(res.data.email);
+            setIsLoggedIn(true);
+            navigate.push('/');
+          }
+        })
+        .catch(err => {
+          console.log('Переданный токен некорректен.');
+          setIsLoggedIn(false);
+        });
     }
-  }, [navigate, isLoggedIn]);
+  };
 
-  function onSignOut() {
-    setIsLoggedIn(false);
-    setEmailName(null);
-    navigate("/sign-in");
-    localStorage.removeItem("jwt");
-  }
+  useEffect(() => {
+    tokenCheck();
+  }, [isLoggedIn]);
 
-    useEffect(() => {
-      if (isLoggedIn === true) {
-        navigate("/");
-      }
-    }, [
-  ]);
-
-
-  // // Верификация токена пользователя
-  // useEffect( () => {
-  //   const userToken = localStorage.getItem('token')
-  //   if (userToken) { auth. getToken(userToken)
-  //       .then( (res) => { setEmailName(res.data.email); setIsLoggedIn(true); navigate.push('/') })
-  //       .catch( (err) => { console.log(`Возникла ошибка верификации токена, ${err}`) })
-  //   }
-  // }, [navigate, isLoggedIn])
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-
-
         <Routes>
-          <Route
-            path="*"
-            element={
-              isLoggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />
-            }
-          />
+          <Route path="*" element={
+            isLoggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />
+          } />
           <Route path='/sign-up' element={<Register onRegister={onRegister} />} />
           <Route path='/sign-in' element={<Login onLogin={onLogin} />} />
           <Route path='/' element={
-            <ProtectedRouter exact path="/" loggedIn={isLoggedIn} >
-              <Header title="Выйти" mail={emailName} onClick={onSignOut} route="" />
+            <ProtectedRoute exact path='/' isLoggedIn={isLoggedIn}>
+              <Header />
               <Main
-                isLogged={isLoggedIn}
                 onEditProfile={handleEditProfileClick}
                 onAddPlace={handleAddPlaceClick}
                 onEditAvatar={handleEditAvatarClick}
@@ -271,11 +236,10 @@ export const App = () => {
                 onCardDelete={handleCardDelete}
               />
               <Footer />
-            </ProtectedRouter>
+            </ProtectedRoute>
           }
           />
         </Routes>
-
 
       </div>
       <EditProfilePopup
@@ -304,13 +268,6 @@ export const App = () => {
         isOpen={isConfirmDeletePopupOpen}
         btnName="Да"
       />
-      <InfoTooltip 
-            image={popupImage} 
-            title={popupTitle} 
-            isOpen={infoTooltip} 
-            onCloseClick={handlePopupCloseClick}
-            onClose={closeAllPopups} 
-          />
       {/**/}
     </CurrentUserContext.Provider>
 
