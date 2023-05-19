@@ -15,6 +15,7 @@ import Register from './Register';
 import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
 import * as auth from './Auth';
+import { getByTestId } from '@testing-library/react';
 
 export const App = () => {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -194,12 +195,14 @@ export const App = () => {
   const tokenCheck = () => {
     if (localStorage.getItem('jwt')) {
       const jwt = localStorage.getItem('jwt');
+      // console.log('localStorage', localStorage.getItem('jwt'))
       auth.getToken(jwt)
+      // console.log(auth.getToken(jwt))
         .then((res) => {
           if (res) {
             setEmail(res.data.email);
             setIsLoggedIn(true);
-            navigate.push('/');
+            navigate('/');
           }
         })
         .catch(err => {
@@ -219,10 +222,10 @@ export const App = () => {
       <div className="page">
         <Routes>
           <Route path="*" element={
-            isLoggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />
+            isLoggedIn ? <Navigate to="/" /> : <Navigate to="/signin" />
           } />
-          <Route path='/sign-up' element={<Register onRegister={onRegister} />} />
-          <Route path='/sign-in' element={<Login onLogin={onLogin} />} />
+          <Route path='/signup' element={<Register onRegister={onRegister} navigate={navigate}/>} />
+          <Route path='/signin' element={<Login onLogin={onLogin} navigate={navigate} />} />
           <Route path='/' element={
             <ProtectedRoute exact path='/' isLoggedIn={isLoggedIn}>
               <Header />
