@@ -28,10 +28,7 @@ export function autohorize(email, password) {
         .then((data) => {
             if (data.token) {
                 const token = data.token;
-                console.log(data)
-                console.log('токен', token);
                 localStorage.setItem('jwt', token);
-                console.log(localStorage);
         
                 return token;
             };
@@ -39,7 +36,6 @@ export function autohorize(email, password) {
 };
 
 export function getToken(token) {
-    console.log('getToken', token);
    return fetch(`${BASE_URL}/users/me`, {
         headers: {
             'Content-Type': 'application/json',

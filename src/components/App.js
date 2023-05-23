@@ -181,7 +181,7 @@ export const App = () => {
 
   function onLogin(email, password) {
     auth.autohorize(email, password).then((res) => {
-      localStorage.setItem("jwt", res.token);
+      // localStorage.setItem("jwt", res.token);
       setIsLoggedIn(true);
       setEmail(email);
       navigate("/");
@@ -192,12 +192,10 @@ export const App = () => {
     });
   }
 
-  const tokenCheck = () => {
+  function tokenCheck() {
     if (localStorage.getItem('jwt')) {
       const jwt = localStorage.getItem('jwt');
-      // console.log('localStorage', localStorage.getItem('jwt'))
       auth.getToken(jwt)
-      // console.log(auth.getToken(jwt))
         .then((res) => {
           if (res) {
             setEmail(res.data.email);
@@ -214,8 +212,7 @@ export const App = () => {
 
   useEffect(() => {
     tokenCheck();
-  }, [isLoggedIn]);
-
+  }, [tokenCheck]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
