@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../index';
-import { Header } from './Header';
+import Header  from './Header';
 import { Main } from './Main'
 import { Footer } from './Footer'
 import { PopupWithForm } from './PopupWithForm';
@@ -13,9 +13,8 @@ import { AddPlacePopup } from './AddPlacePopup';
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
-import ProtectedRoute from './ProtectedRoute';
+import ProtectedRouteElement from './ProtectedRouteElement';
 import * as auth from './Auth';
-import { getByTestId } from '@testing-library/react';
 
 export const App = () => {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -182,7 +181,9 @@ export const App = () => {
   function onLogin(email, password) {
     auth.autohorize(email, password).then((res) => {
       // localStorage.setItem("jwt", res.token);
+      console.log(localStorage)
       setIsLoggedIn(true);
+      // console.log('onLogin', isLoggedIn)
       setEmail(email);
       navigate("/");
     }).catch(() => {
@@ -192,7 +193,7 @@ export const App = () => {
     });
   }
 
-  function tokenCheck() {
+  const tokenCheck = () => {
     if (localStorage.getItem('jwt')) {
       const jwt = localStorage.getItem('jwt');
       auth.getToken(jwt)
@@ -211,36 +212,41 @@ export const App = () => {
   };
 
   useEffect(() => {
-    tokenCheck();
-  }, [tokenCheck]);
+    // tokenCheck();
+  }, [isLoggedIn]);
+
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
+        <Header isLoggedIn={isLoggedIn} />
+
         <Routes>
+          <Route path="/" element={
+            <ProtectedRouteElement exact path='/' isLoggedIn={isLoggedIn}
+              element={Main}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              cards={cards}
+              onCardDelete={handleCardDelete}
+            >
+              <Header />
+              <Footer/>
+            </ProtectedRouteElement>}
+          />
+
+          <Route path='/sign-up' element={<Register onRegister={onRegister} />} />
+
+          <Route path='/sign-in' element={<Login onLogin={onLogin} />} />
+
           <Route path="*" element={
             isLoggedIn ? <Navigate to="/" /> : <Navigate to="/signin" />
           } />
-          <Route path='/signup' element={<Register onRegister={onRegister} navigate={navigate}/>} />
-          <Route path='/signin' element={<Login onLogin={onLogin} navigate={navigate} />} />
-          <Route path='/' element={
-            <ProtectedRoute exact path='/' isLoggedIn={isLoggedIn}>
-              <Header />
-              <Main
-                onEditProfile={handleEditProfileClick}
-                onAddPlace={handleAddPlaceClick}
-                onEditAvatar={handleEditAvatarClick}
-                onCardClick={handleCardClick}
-                onCardLike={handleCardLike}
-                cards={cards}
-                onCardDelete={handleCardDelete}
-              />
-              <Footer />
-            </ProtectedRoute>
-          }
-          />
         </Routes>
-
+        <Footer isLoggedIn={isLoggedIn} />
       </div>
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
@@ -273,5 +279,7 @@ export const App = () => {
 
   );
 }
+
+
 
 export default App;

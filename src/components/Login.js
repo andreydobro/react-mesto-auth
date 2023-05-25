@@ -23,12 +23,17 @@ function Login(props) {
 
   return (
     <>
-      <header className="header">
+
+      {/* <header className="header">
         <img className="header__logo" src={logo} alt="лого место" />
         <Link to="/sign-up" className="header__nav-link">
           Регистрация
         </Link>
-      </header>
+      </header> */}\
+
+      <Link to="/sign-up" className="header__nav-link">
+        Регистрация
+      </Link>
 
       <form className="entry-form" onSubmit={handleSubmit}>
         <h2 className="entry-form__title">Вход</h2>

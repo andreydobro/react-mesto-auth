@@ -19,49 +19,53 @@ function Register(props) {
     props.onRegister(email, password);
   }
 
-    return (
-        <>
-          <header className="header">
-            <img className="header__logo" src={logo} alt="лого место" />
+  return (
+    <>
+      {/* <header className="header">
+      <img className="header__logo" src={logo} alt="лого место" />
             <Link to="/sign-in" className="header__nav-link">
               Войти
             </Link>
-          </header>
-    
-          <form className="entry-form" onSubmit={handleSubmit}>
-            <h2 className="entry-form__title">Регистрация</h2>
-            <input
-              value={ email || '' }
-              onChange={ handleEmailInput }
-              name="email"
-              type="email"
-              className="entry-form__input"
-              placeholder="Email"
-              autoComplete="off"
-            ></input>
-            <span className="entry-form__input-error"></span>
-            <input
-              value={ password || '' }
-              onChange={ handlePasswordInput }
-              name="password"
-              type="password"
-              className="entry-form__input"
-              placeholder="Пароль"
-              autoComplete="off"
-            ></input>
-            <span className="entry-form__input-error"></span>
-            <button type="submit" className="entry-form__button">
-              Зарегистрироваться
-            </button>
-            <div className="register-signin">
-              <p className="register-signin__p">Уже зарегистрированы?</p>
-              <Link to="/sign-in" className="register-signin__link">
-                Войти
-              </Link>
-            </div>
-          </form>
-        </>
-      );
-    }
+          </header> */}
+
+      <Link to="/sign-in" className="header__nav-link">
+        Войти
+      </Link>
+
+      <form className="entry-form" onSubmit={handleSubmit}>
+        <h2 className="entry-form__title">Регистрация</h2>
+        <input
+          value={email || ''}
+          onChange={handleEmailInput}
+          name="email"
+          type="email"
+          className="entry-form__input"
+          placeholder="Email"
+          autoComplete="off"
+        ></input>
+        <span className="entry-form__input-error"></span>
+        <input
+          value={password || ''}
+          onChange={handlePasswordInput}
+          name="password"
+          type="password"
+          className="entry-form__input"
+          placeholder="Пароль"
+          autoComplete="off"
+        ></input>
+        <span className="entry-form__input-error"></span>
+        <button type="submit" className="entry-form__button">
+          Зарегистрироваться
+        </button>
+        <div className="register-signin">
+          <p className="register-signin__p">Уже зарегистрированы?</p>
+          <Link to="/sign-in" className="register-signin__link">
+            Войти
+          </Link>
+        </div>
+      </form>
+    </>
+  );
+}
 
 export default Register;
