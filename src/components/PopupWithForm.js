@@ -17,8 +17,7 @@ export const PopupWithForm = (props) => {
 
         <form
           className={`popup__form popup__form_type_${props.name}`}
-          name={props.name}
-          noValidate onSubmit={props.onSubmit}>
+          name={props.name}>
 
           {props.children}
           <button className={`popup__button-save popup__button-save_${props.name}`} type={props.title}>{props.btnName}

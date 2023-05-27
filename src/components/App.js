@@ -15,7 +15,7 @@ import Register from './Register';
 import Login from './Login';
 import ProtectedRouteElement from './ProtectedRouteElement';
 import InfoTooltip from './InfoTooltip';
-import * as auth from './Auth';
+import * as auth from '../utils/auth';
 import resolve from "../images/resolve.svg";
 import reject from "../images/reject.svg";
 
@@ -189,7 +189,7 @@ export const App = () => {
       setPopupImage(reject);
       setPopupTitle("Что-то пошло не так! Попробуйте ещё раз.");
     })
-    .finally(handleInfoTooltip);
+      .finally(handleInfoTooltip);
   }
 
   function onLogin(email, password) {
@@ -220,11 +220,11 @@ export const App = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (isLoggedIn === true) {
-  //     navigate("/");
-  //   }
-  // }, [isLoggedIn, navigate]);
+  useEffect(() => {
+    if (isLoggedIn === true) {
+      navigate("/");
+    }
+  }, [isLoggedIn, navigate]);
 
   function onSignOut() {
     setIsLoggedIn(false);
@@ -237,26 +237,25 @@ export const App = () => {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        {/* <Header isLoggedIn={isLoggedIn} /> */}
 
         <Routes>
-        <Route exact path="/" element={
-              <>
-                <Header title="Выйти" email={email} onClick={onSignOut} route="" />
-                <ProtectedRouteElement
-                  isLoggedIn={isLoggedIn}
-                  element={Main}
-                  onEditProfile={handleEditProfileClick}
-                  onAddPlace={handleAddPlaceClick}
-                  onEditAvatar={handleEditAvatarClick}
-                  onCardClick={handleCardClick}
-                  onCardLike={handleCardLike}
-                  cards={cards}
-                  onCardDelete={handleCardDelete}
-                />
-                <Footer />
-              </>
-            }/>
+          <Route exact path="/" element={
+            <>
+              <Header title="Выйти" email={email} onClick={onSignOut} route="" />
+              <ProtectedRouteElement
+                isLoggedIn={isLoggedIn}
+                element={Main}
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onEditAvatar={handleEditAvatarClick}
+                onCardClick={handleCardClick}
+                onCardLike={handleCardLike}
+                cards={cards}
+                onCardDelete={handleCardDelete}
+              />
+              <Footer />
+            </>
+          } />
 
           <Route path="/sign-up" element={
             <>
@@ -304,13 +303,13 @@ export const App = () => {
         isOpen={isConfirmDeletePopupOpen}
         btnName="Да"
       />
-      <InfoTooltip 
-            image={popupImage} 
-            title={popupTitle} 
-            isOpen={infoTooltip} 
-            onCloseClick={handlePopupCloseClick}
-            onClose={closeAllPopups} 
-          />
+      <InfoTooltip
+        image={popupImage}
+        title={popupTitle}
+        isOpen={infoTooltip}
+        onCloseClick={handlePopupCloseClick}
+        onClose={closeAllPopups}
+      />
       {/**/}
     </CurrentUserContext.Provider>
 

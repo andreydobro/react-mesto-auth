@@ -32,7 +32,7 @@ export const Card = ({ card, onCardClick, onCardLike, onCardDelete }) => {
 	}
 
     return (
-        <li class="element">
+        <li className="element">
             <button className={cardDeleteButtonClassName} tupe="button" onClick={handleDeleteClick}></button>
             <img className="element__foto" src={card.link} alt={card.name} onClick={handleClick} />
             <h2 className="element__title">{card.name}</h2>

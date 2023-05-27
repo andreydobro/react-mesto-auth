@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import logo from "../images/logo.svg";
 
 function Login(props) {
   const [email, setEmail] = useState('');
@@ -17,24 +15,9 @@ function Login(props) {
   function handleSubmit(evt) {
     evt.preventDefault();
     props.onLogin(email, password);
-    setEmail('');
-    setPassword('');
   }
 
   return (
-    <>
-
-      {/* <header className="header">
-        <img className="header__logo" src={logo} alt="лого место" />
-        <Link to="/sign-up" className="header__nav-link">
-          Регистрация
-        </Link>
-      </header> */}
-
-      {/* <Link to="/sign-up" className="header__nav-link">
-        Регистрация
-      </Link> */}
-
       <form className="entry-form" onSubmit={handleSubmit}>
         <h2 className="entry-form__title">Вход</h2>
         <input
@@ -44,7 +27,6 @@ function Login(props) {
           type="email"
           className="entry-form__input"
           placeholder="Email"
-          // autoComplete="off"
           value={email}
           required
         ></input>
@@ -66,7 +48,6 @@ function Login(props) {
           Войти
         </button>
       </form>
-    </>
   );
 }
 
