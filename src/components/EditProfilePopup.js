@@ -45,7 +45,7 @@ export function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
                     required=""
                     placeholder="Имя"
                     onChange={handleNameChange}
-                    value={name}
+                    value={name || ''}
                 />
                 <span id="nameuser-error" className="popup__error" />
             </label>
@@ -60,7 +60,7 @@ export function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
                     required=""
                     placeholder="О себе"
                     onChange={handleAboutChange}
-                    value={about}
+                    value={about || ''}
                 />
                 <span id="aboutuser-error" className="popup__error" />
             </label>

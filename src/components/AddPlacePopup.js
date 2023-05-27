@@ -41,7 +41,7 @@ export function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
           required=""
           minLength={2}
           maxLength={30}
-          value={name}
+          value={name || ''}
           onChange={handleNameChange}
         />
         <span id="name-error" className="popup__error">
@@ -56,7 +56,7 @@ export function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
           type="url"
           placeholder="Ссылка на картинку"
           required=""
-          value={link}
+          value={link || ''}
           onChange={handleLinkChange}
         />
         <span id="url-error" className="popup__error">

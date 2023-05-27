@@ -4,7 +4,7 @@ import Header from './Header';
 import { Main } from './Main'
 import { Footer } from './Footer'
 import { PopupWithForm } from './PopupWithForm';
-import { ImagePopup } from './ImagePopup';
+import ImagePopup from './ImagePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { api } from '../utils/api';
 import { EditProfilePopup } from './EditProfilePopup'
@@ -58,6 +58,7 @@ export const App = () => {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard({});
+    setPopupImage(false);
     setInfoTooltip(false);
   }
 
@@ -195,7 +196,6 @@ export const App = () => {
   function onLogin(email, password) {
     auth.autohorize(email, password).then((res) => {
       // localStorage.setItem("jwt", res.token);
-      console.log(localStorage)
       setIsLoggedIn(true);
       setEmail(email);
       navigate("/");
@@ -295,7 +295,10 @@ export const App = () => {
         onUpdateAvatar={handleUpdateAvatar}
         isLoading={isLoading}
       />
-      <ImagePopup card={selectedCard} onClose={closeAllPopups}></ImagePopup>
+      <ImagePopup
+        card={selectedCard}
+        onClose={closeAllPopups}
+      />
       <PopupWithForm
         onClose={closeAllPopups}
         title="Вы уверены?"
