@@ -29,11 +29,11 @@ function Login(props) {
         <Link to="/sign-up" className="header__nav-link">
           Регистрация
         </Link>
-      </header> */}\
+      </header> */}
 
-      <Link to="/sign-up" className="header__nav-link">
+      {/* <Link to="/sign-up" className="header__nav-link">
         Регистрация
-      </Link>
+      </Link> */}
 
       <form className="entry-form" onSubmit={handleSubmit}>
         <h2 className="entry-form__title">Вход</h2>

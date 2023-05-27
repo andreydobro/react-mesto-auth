@@ -1,25 +1,13 @@
-import logo from '../images/logo.svg';
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import logo from "../images/logo.svg";
 
-function Header({ isLoggedIn, email, onSignout, isLoginHref }) {
-
+function Header(props) {
   return (
     <header className="header">
-      <div className="header__logo" />
-      <nav className='header__nav'>
-        <ul className='header__list'>
-          <li>
-            <div className='header__user'>{isLoggedIn ? email : ''}</div>
-          </li>
-          <li>
-            <Link
-              to='/'
-              className='header__button'
-              onClick={onSignout}>
-              {isLoggedIn ? 'Выйти' : ''}
-            </Link>
-          </li>
-        </ul>
+      <img className="header__logo" src={logo} alt="Логотип Mesto"/>
+      <nav className="header__auth">
+        <p className="header__text">{props.email}</p>
+        <Link to={props.route} className="header__nav-link" type="button" onClick={props.onClick}>{props.title}</Link>
       </nav>
     </header>
   )

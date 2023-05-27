@@ -21,17 +21,6 @@ function Register(props) {
 
   return (
     <>
-      {/* <header className="header">
-      <img className="header__logo" src={logo} alt="лого место" />
-            <Link to="/sign-in" className="header__nav-link">
-              Войти
-            </Link>
-          </header> */}
-
-      <Link to="/sign-in" className="header__nav-link">
-        Войти
-      </Link>
-
       <form className="entry-form" onSubmit={handleSubmit}>
         <h2 className="entry-form__title">Регистрация</h2>
         <input

@@ -52,3 +52,8 @@
 @import url(./blocks/register-signin/register-signin.css);
 @import url(./blocks/register-signin/__p/register-signin__p.css);
 @import url(./blocks/register-signin/__link/register-signin__link.css);
+@import url(./blocks/popup/__info/popup__info.css);
+@import url(./blocks/popup/__status/popup__status.css);
+@import url(./blocks/popup/__message/popup__messeg.css);
+@import url(./blocks/header/__text/header__text.css);
+@import url(./blocks/header/__auth/header__auth.css);
