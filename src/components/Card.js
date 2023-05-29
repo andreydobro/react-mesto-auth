@@ -20,27 +20,30 @@ export const Card = ({ card, onCardClick, onCardLike, onCardDelete }) => {
     const cardLikeButtonClassName = (`
 	element__like ${isLiked ? 'element__like_active' : ''}`)
 
+
     const handleClick = () => {
         onCardClick(card)
     }
 
     const handleLikeClick = () => {
-		onCardLike(card)
-	}
-	const handleDeleteClick = () => {
-		onCardDelete(card)
-	}
+        onCardLike(card)
+    }
+    const handleDeleteClick = () => {
+        onCardDelete(card)
+    }
 
     return (
         <li className="element">
-            <button className={cardDeleteButtonClassName} tupe="button" onClick={handleDeleteClick}></button>
+            {isOwn && <button 
+            className={cardDeleteButtonClassName} type="button" 
+            title="Удалить" onClick={handleDeleteClick} />}
             <img className="element__foto" src={card.link} alt={card.name} onClick={handleClick} />
             <h2 className="element__title">{card.name}</h2>
             <div className="element__like-form">
-                <button 
-                className={cardLikeButtonClassName} 
-                type="button" 
-                onClick={handleLikeClick}></button>
+                <button
+                    className={cardLikeButtonClassName}
+                    type="button"
+                    onClick={handleLikeClick}></button>
                 <div className="element__like-count">{card.likes.length}</div>
             </div>
         </li>

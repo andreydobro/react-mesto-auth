@@ -58,7 +58,7 @@ export const App = () => {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard({});
-    setPopupImage(false);
+    setPopupImage('');
     setInfoTooltip(false);
   }
 
@@ -275,7 +275,6 @@ export const App = () => {
             isLoggedIn ? <Navigate to="/" /> : <Navigate to="/signin" />
           } />
         </Routes>
-        <Footer isLoggedIn={isLoggedIn} />
       </div>
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}

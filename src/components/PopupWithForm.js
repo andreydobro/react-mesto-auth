@@ -1,6 +1,7 @@
 import React from "react";
 
 export const PopupWithForm = (props) => {
+
   return (
     <section
       className={`popup popup_type_${props.name} ${props.isOpen ? 'popup_opened' : ''}`}
@@ -17,7 +18,7 @@ export const PopupWithForm = (props) => {
 
         <form
           className={`popup__form popup__form_type_${props.name}`}
-          name={props.name}>
+          name={props.name} onSubmit={props.onSubmit}>
 
           {props.children}
           <button className={`popup__button-save popup__button-save_${props.name}`} type={props.title}>{props.btnName}
